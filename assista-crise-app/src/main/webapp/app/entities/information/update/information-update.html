@@ -1,0 +1,129 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-information-heading"
+        data-cy="InformationCreateUpdateHeading"
+        jhiTranslate="assistaCriseApp.information.home.createOrEditLabel"
+      >
+        Create or edit a Information
+      </h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="global.field.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let contenuRef = editForm.get('contenu')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_contenu" jhiTranslate="assistaCriseApp.information.contenu">Contenu</label>
+          <textarea class="form-control" name="contenu" id="field_contenu" data-cy="contenu" formControlName="contenu"></textarea>
+          @if (contenuRef.invalid && (contenuRef.dirty || contenuRef.touched)) {
+            <div>
+              @if (editForm.get('contenu')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let datePublicationRef = editForm.get('datePublication')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_datePublication" jhiTranslate="assistaCriseApp.information.datePublication"
+            >Date Publication</label
+          >
+          <div class="d-flex">
+            <input
+              id="field_datePublication"
+              data-cy="datePublication"
+              type="datetime-local"
+              class="form-control"
+              name="datePublication"
+              formControlName="datePublication"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+          @if (datePublicationRef.invalid && (datePublicationRef.dirty || datePublicationRef.touched)) {
+            <div>
+              @if (editForm.get('datePublication')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('datePublication')?.errors?.datetimelocal"
+                jhiTranslate="entity.validation.datetimelocal"
+                >This field should be a date and time.</small
+              >
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_auteur" jhiTranslate="assistaCriseApp.information.auteur">Auteur</label>
+          <select
+            class="form-control"
+            id="field_auteur"
+            data-cy="auteur"
+            name="auteur"
+            formControlName="auteur"
+            [compareWith]="compareUtilisateur"
+          >
+            @if (!editForm.get('auteur')!.value) {
+              <option [ngValue]="null" selected></option>
+            }
+            @for (utilisateurOption of utilisateursSharedCollection(); track $index) {
+              <option [ngValue]="utilisateurOption">{{ utilisateurOption.id }}</option>
+            }
+          </select>
+        </div>
+        @if (editForm.get(['auteur'])!.invalid && (editForm.get(['auteur'])!.dirty || editForm.get(['auteur'])!.touched)) {
+          <div>
+            @if (editForm.get(['auteur'])?.errors?.required) {
+              <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+            }
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_crise" jhiTranslate="assistaCriseApp.information.crise">Crise</label>
+          <select class="form-control" id="field_crise" data-cy="crise" name="crise" formControlName="crise" [compareWith]="compareCrise">
+            @if (!editForm.get('crise')!.value) {
+              <option [ngValue]="null" selected></option>
+            }
+            @for (criseOption of crisesSharedCollection(); track $index) {
+              <option [ngValue]="criseOption">{{ criseOption.id }}</option>
+            }
+          </select>
+        </div>
+        @if (editForm.get(['crise'])!.invalid && (editForm.get(['crise'])!.dirty || editForm.get(['crise'])!.touched)) {
+          <div>
+            @if (editForm.get(['crise'])?.errors?.required) {
+              <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+            }
+          </div>
+        }
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban" />&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving()"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save" />&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

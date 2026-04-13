@@ -1,0 +1,72 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (utilisateur(); as utilisateurRef) {
+      <div>
+        <h2 data-cy="utilisateurDetailsHeading"><span jhiTranslate="assistaCriseApp.utilisateur.detail.title">Utilisateur</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ utilisateurRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="assistaCriseApp.utilisateur.nom">Nom</span></dt>
+          <dd>
+            <span>{{ utilisateurRef.nom }}</span>
+          </dd>
+          <dt><span jhiTranslate="assistaCriseApp.utilisateur.prenom">Prenom</span></dt>
+          <dd>
+            <span>{{ utilisateurRef.prenom }}</span>
+          </dd>
+          <dt><span jhiTranslate="assistaCriseApp.utilisateur.email">Email</span></dt>
+          <dd>
+            <span>{{ utilisateurRef.email }}</span>
+          </dd>
+          <dt><span jhiTranslate="assistaCriseApp.utilisateur.telephone">Telephone</span></dt>
+          <dd>
+            <span>{{ utilisateurRef.telephone }}</span>
+          </dd>
+          <dt><span jhiTranslate="assistaCriseApp.utilisateur.role">Role</span></dt>
+          <dd>
+            <span [jhiTranslate]="'assistaCriseApp.RoleUtilisateur.' + (utilisateurRef.role ?? 'null')">{{
+              {
+                null: '',
+                ADMINISTRATEUR: 'ADMINISTRATEUR',
+                AUTORITE_LOCALE: 'AUTORITE_LOCALE',
+                SINISTRE: 'SINISTRE',
+                CITOYEN: 'CITOYEN',
+                SECOURS: 'SECOURS',
+              }[utilisateurRef.role ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="assistaCriseApp.utilisateur.estBanni">Est Banni</span></dt>
+          <dd>
+            <span>{{ utilisateurRef.estBanni }}</span>
+          </dd>
+          <dt><span jhiTranslate="assistaCriseApp.utilisateur.crisesTouchees">Crises Touchees</span></dt>
+          <dd>
+            @for (crisesTouchees of utilisateurRef.crisesToucheeses; track $index; let last = $last) {
+              <span>
+                <a [routerLink]="['/crise', crisesTouchees.id, 'view']">{{ crisesTouchees?.id }}</a
+                >{{ last ? '' : ', ' }}
+              </span>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left" />&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/utilisateur', utilisateurRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt" />&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

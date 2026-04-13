@@ -1,0 +1,12 @@
+{
+  "assistaCriseApp": {
+    "RoleUtilisateur": {
+      "null": "",
+      "ADMINISTRATEUR": "ADMINISTRATEUR",
+      "AUTORITE_LOCALE": "AUTORITE_LOCALE",
+      "SINISTRE": "SINISTRE",
+      "CITOYEN": "CITOYEN",
+      "SECOURS": "SECOURS"
+    }
+  }
+}

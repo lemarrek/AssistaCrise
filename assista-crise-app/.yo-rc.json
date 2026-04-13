@@ -1,0 +1,13 @@
+{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "baseName": "assistaCrise",
+    "entities": ["Utilisateur", "Crise", "Demande", "Offre", "Information"],
+    "jhipsterVersion": "9.0.0",
+    "jwtSecretKey": "NWZiNzZhZWY1OTFiYTRmNDRmZDM0OTdlYTcxNWQwYjBjYTI4YWM2MzE5MDczOTcxZGMzMjE5MDRlMTFiODY3ZmM2NzI3MGQxMzBjZWZjMjFiZWY4NTI3NjM1ZDNkNjY3NjFjYjVkYmIxNDVhNjUyMGFmNGEyYTc5YzQzNDcxZjU=",
+    "languages": ["en"],
+    "lastLiquibaseTimestamp": 1775734065000,
+    "nativeLanguage": "en",
+    "packageName": "fr.uga.assista"
+  }
+}
