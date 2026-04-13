@@ -1,0 +1,81 @@
+application {
+  config {
+    baseName assistaCrise
+    applicationType monolith
+    packageName fr.uga.assista
+  }
+  entities *
+}
+
+// Énumérations
+enum RoleUtilisateur {
+  ADMINISTRATEUR, AUTORITE_LOCALE, SINISTRE, CITOYEN, SECOURS
+}
+
+enum StatutAnnonce {
+  OUVERTE, EN_COURS_DE_RESOLUTION, RESOLUE, FERMEE, ARCHIVEE
+}
+
+// Entités
+entity Utilisateur {
+  nom String required minlength(2) maxlength(50)
+  prenom String required minlength(2) maxlength(50)
+  email String required pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)
+  telephone String
+  role RoleUtilisateur required
+  estBanni Boolean required
+}
+
+entity Crise {
+  titre String required
+  typeEvent String required // ex: feu de forêt, inondation
+  dateDebut ZonedDateTime required
+  dateFin ZonedDateTime
+  estActive Boolean required
+}
+
+entity Demande {
+  titre String required minlength(5)
+  description TextBlob required
+  typeBesoin String required
+  latitude Double required
+  longitude Double required
+  statut StatutAnnonce required
+  dateCreation ZonedDateTime required
+}
+
+entity Offre {
+  titre String required minlength(5)
+  description TextBlob required
+  servicePropose String required
+  latitude Double required
+  longitude Double required
+  statut StatutAnnonce required
+  dateCreation ZonedDateTime required
+}
+
+entity Information {
+  contenu TextBlob required
+  datePublication ZonedDateTime required
+}
+
+// Relations
+relationship ManyToOne {
+  Demande{auteur required} to Utilisateur
+  Offre{auteur required} to Utilisateur
+  Information{auteur required} to Utilisateur
+  
+  Demande{crise required} to Crise
+  Offre{crise required} to Crise
+  Information{crise required} to Crise
+  
+  Crise{validateur} to Utilisateur
+}
+
+relationship ManyToMany {
+  Utilisateur{crisesTouchees} to Crise{sinistres}
+}
+
+// Options de génération
+paginate Demande, Offre, Information with pagination
+service all with serviceImpl

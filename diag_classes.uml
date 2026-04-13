@@ -1,0 +1,83 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+enum RoleUtilisateur {
+  ADMINISTRATEUR
+  AUTORITE_LOCALE
+  SINISTRE
+  CITOYEN
+  SECOURS
+}
+
+enum StatutAnnonce {
+  OUVERTE
+  EN_COURS_DE_RESOLUTION
+  RESOLUE
+  FERMEE
+  ARCHIVEE
+}
+
+class Utilisateur {
+  - id: Long
+  - nom: String
+  - prenom: String
+  - email: String
+  - telephone: String
+  - role: RoleUtilisateur
+  - estBanni: Boolean
+}
+
+class Crise {
+  - id: Long
+  - titre: String
+  - typeEvent: String
+  - dateDebut: ZonedDateTime
+  - dateFin: ZonedDateTime
+  - estActive: Boolean
+}
+
+class Demande {
+  - id: Long
+  - titre: String
+  - description: String
+  - typeBesoin: String
+  - latitude: Double
+  - longitude: Double
+  - statut: StatutAnnonce
+  - dateCreation: ZonedDateTime
+}
+
+class Offre {
+  - id: Long
+  - titre: String
+  - description: String
+  - servicePropose: String
+  - latitude: Double
+  - longitude: Double
+  - statut: StatutAnnonce
+  - dateCreation: ZonedDateTime
+}
+
+class Information {
+  - id: Long
+  - contenu: String
+  - datePublication: ZonedDateTime
+}
+
+' Relations basées sur le schéma conceptuel
+Utilisateur "1" -- "*" Demande : a saisi >
+Utilisateur "1" -- "*" Offre : a saisi >
+Utilisateur "1" -- "*" Information : a saisi >
+
+Utilisateur "1" -- "*" Crise : est touché par >
+Utilisateur "1" -- "*" Crise : valide >
+
+Demande "*" -- "1" Crise : est relative à >
+Offre "*" -- "1" Crise : est relative à >
+Information "*" -- "1" Crise : est relative à >
+
+' Consultation (relations de dépendance ou d'association simple)
+Utilisateur ..> Demande : consulte
+Utilisateur ..> Offre : consulte
+Utilisateur ..> Information : consulte
+@enduml
